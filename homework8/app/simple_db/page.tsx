@@ -25,14 +25,10 @@ export default async function Guitar() {
     revalidatePath("/")
   }
 
-
-
   return (
     <div>
       <h1>Simple DB</h1>
       <div>{JSON.stringify(data)}</div>
-
-
 
       <div>
         {data.map((item, index) => (
