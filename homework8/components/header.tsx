@@ -35,6 +35,10 @@ export default function Header() {
                            <a className="text-gray-500 transition hover:text-gray-500/75" href="/user"> Blog </a>
                         </li>
 
+                        <li>
+                           <a className="text-gray-500 transition hover:text-gray-500/75" href="/simple_db"> Database </a>
+                        </li>
+
                        
                      </ul>
                   </nav>
