@@ -1,24 +1,52 @@
 import prisma from "@/utils/db";
+import { BRAND, z } from "zod";
 import { redirect } from "next/navigation";
+import { useFormState } from "react-dom";
 
-export default function editPage({ searchParams }: 
+
+const schema = z.object({
+  brand: z.string({required_error: "Brand name is required",}).min(3).max(20),
+  name: z.string({required_error: "Name is required",}).min(3).max(20),
+  price: z.number({required_error: "Price is required",}).nonnegative(),
+})
+
+export default async function editPage({ searchParams }: 
     { searchParams: { id: string, brand: string, name: string, price: number } }) {
     const { id, brand, name, price } = searchParams;
 
 
     async function updateModel(formData : FormData) {
         "use server"
-        const brand = formData.get("brand") as string;
-        const name = formData.get("name") as string;
 
-        const priceString = formData.get("price") as string;
-        const price = priceString? parseFloat(priceString): null;
+        const result = schema.safeParse({
+          brand: formData.get('brand'),
+          name: formData.get('name'),
+          price: Number(formData.get('price')),
+    
+        })
 
 
-        if(price === null || isNaN(price)){
-            throw new Error("Price is required and must be a valid number.");
+        // const brand = formData.get("brand") as string;
+        // const name =  formData.get("name") as string;
+
+        // const priceString = formData.get("price") as string;
+        // const price = priceString? parseFloat(priceString): null;
+
+
+        // if(price === null || isNaN(price)){
+        //     throw new Error("Price is required and must be a valid number.");
+        // }
+
+        if(!result.success){
+          console.log("Validation errors:", result.error.flatten().fieldErrors);
+          // Optionally: Display the errors in the UI by setting state if necessary.
+          return;
         }
 
+        const [state, action] = useFormState(updateModel,{})
+
+        const {brand, name, price} = result.data
+        await wait(500)
 
         await prisma.guitar.update({data:{brand,name,price}, where:{id}})
         redirect("/simple_db");
@@ -46,6 +74,7 @@ export default function editPage({ searchParams }:
                       name="name"
                       type="text"
                     />
+                    {( state?.errors) && <span className="text-red-600">{state?.errors.message[0]}</span> }
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <input
@@ -72,3 +101,5 @@ export default function editPage({ searchParams }:
           </div>
         </div>)
 }
+
+const wait = (delay: number) => new Promise(resolve => setTimeout(resolve, delay));
