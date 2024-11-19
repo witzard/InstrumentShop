@@ -2,6 +2,7 @@ import { revalidatePath } from 'next/cache'
 import prisma from '../../utils/db'
 import GuitarItem from '../../components/GuitarItem'
 
+const STYLE = `w-full rounded-lg border border-gray-200 p-3 text-sm`
 
 export default async function Guitar() {
   // const firstRow = await prisma.guitar.findFirst()
@@ -37,7 +38,8 @@ export default async function Guitar() {
       <div>
         {data.map((item, index) => (
           <>
-          <GuitarItem key={index}
+          <GuitarItem 
+            key={index}
             index={index}
             id={item.id} 
             brand={item.brand} 
@@ -64,7 +66,7 @@ export default async function Guitar() {
               <div className=" rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
                 <form action={addGuitar} className="space-y-4">
                     <input
-                      className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                      className={STYLE}
                       placeholder="Name"
                       name="name"
                       type="text"
@@ -72,13 +74,13 @@ export default async function Guitar() {
 
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <input
-                        className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                        className={STYLE}
                         placeholder="Brand"
                         name="brand"
                         type="text"
                       />
                       <input
-                        className="w-full rounded-lg border border-gray-200 p-3 text-sm"
+                        className={STYLE}
                         placeholder="Price"
                         name="price"
                         type="number"

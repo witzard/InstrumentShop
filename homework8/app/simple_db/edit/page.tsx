@@ -48,14 +48,14 @@ export default function editPage({ searchParams }:
         },
         where: { id },
       })
-      redirect("/simple_db");
+      
     } catch (err) {
       if (err instanceof z.ZodError) {
         console.error("Validation errors:", err.errors);
         throw new Error(`Validation errors: ${JSON.stringify(err.errors)}`);
       } 
-
     }
+    redirect("/simple_db");
   }
 
 
@@ -99,7 +99,7 @@ export default function editPage({ searchParams }:
 
               <div className="flex justify-end mt-4 ">
               
-                <button className="inline-block w-full rounded-lg bg-[#775b45] px-5 py-3 font-medium text-white sm:w-auto">update</button>
+                <button type="submit" className="inline-block w-full rounded-lg bg-[#775b45] px-5 py-3 font-medium text-white sm:w-auto">update</button>
               </div>
 
             </form>
